@@ -16,7 +16,36 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Kirubel Mulat | Student",
-  description: "A modern developer website built with Next.js, TypeScript, and Tailwind CSS. Showcase your projects and connect with the community.",
+  description: "Software Engineering student at Bournemouth University. Building web applications, Discord bots, and exploring modern technologies.",
+  keywords: ["Kirubel Mulat", "Software Engineer", "Student", "Developer", "Portfolio", "Next.js", "React", "TypeScript"],
+  authors: [{ name: "Kirubel Mulat" }],
+  creator: "Kirubel Mulat",
+  metadataBase: new URL('https://portfolio-sentrisentri.vercel.app'),
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', type: 'image/x-icon' }
+    ],
+    apple: [
+      { url: '/icon.svg', type: 'image/svg+xml' }
+    ],
+  },
+  openGraph: {
+    title: "Kirubel Mulat | Student Software Engineer",
+    description: "Software Engineering student at Bournemouth University. Building web applications, Discord bots, and exploring modern technologies.",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kirubel Mulat | Student Software Engineer",
+    description: "Software Engineering student at Bournemouth University. Building web applications, Discord bots, and exploring modern technologies.",
+    creator: "@sentrisentri",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
