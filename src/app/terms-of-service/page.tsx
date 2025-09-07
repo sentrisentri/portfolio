@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 export default function TermsOfService() {
   const [isClient, setIsClient] = useState(false);
@@ -73,7 +74,7 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-2xl font-semibold text-slate-200 mb-4">1. Acceptance of Terms</h2>
             <p className="text-slate-300 leading-relaxed">
-              By inviting and using the Hawkshot Discord bot ("the Bot"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use the Bot.
+              By inviting and using the Hawkshot Discord bot (&quot;the Bot&quot;), you agree to be bound by these Terms of Service (&quot;Terms&quot;). If you do not agree to these Terms, please do not use the Bot.
             </p>
           </section>
 
@@ -96,7 +97,7 @@ export default function TermsOfService() {
               <div>
                 <h3 className="text-lg font-medium text-slate-200 mb-2">Appropriate Use</h3>
                 <p className="text-slate-300 leading-relaxed">
-                  You agree to use the Bot only for its intended purposes and in compliance with Discord's Terms of Service and Community Guidelines.
+                  You agree to use the Bot only for its intended purposes and in compliance with Discord&apos;s Terms of Service and Community Guidelines.
                 </p>
               </div>
               
@@ -154,7 +155,7 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-2xl font-semibold text-slate-200 mb-4">7. Limitation of Liability</h2>
             <p className="text-slate-300 leading-relaxed">
-              We provide the Bot "as is" without warranties of any kind. We shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the Bot.
+              We provide the Bot &quot;as is&quot; without warranties of any kind. We shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the Bot.
             </p>
           </section>
 
@@ -181,14 +182,14 @@ export default function TermsOfService() {
         </div>
 
         <div className="mt-12 text-center">
-          <a href="/" className="inline-flex items-center px-6 py-3 text-sm font-medium text-slate-900 bg-teal-400 rounded-md hover:bg-teal-300 transition-all duration-300 transform hover:scale-105">
+          <Link href="/" className="inline-flex items-center px-6 py-3 text-sm font-medium text-slate-900 bg-teal-400 rounded-md hover:bg-teal-300 transition-all duration-300 transform hover:scale-105">
             ← Return to Hawkshot
-          </a>
+          </Link>
         </div>
 
         <div className="mt-12 pt-8 border-t border-slate-700">
           <p className="text-sm text-slate-500 text-center">
-            Hawkshot isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.
+            Hawkshot isn&apos;t endorsed by Riot Games and doesn&apos;t reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.
           </p>
         </div>
       </div>

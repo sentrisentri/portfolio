@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 export default function Home() {
   const [showHawkshotModal, setShowHawkshotModal] = useState(false);
@@ -74,20 +75,20 @@ export default function Home() {
     };
 
     const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
+      const element = e.target as HTMLElement;
       // Check if the element or its parent is clickable or scrollable
-      const isClickable = target.closest('a, button, [role="button"], input, textarea, select') ||
-                          target.tagName === 'A' || 
-                          target.tagName === 'BUTTON' || 
-                          target.classList.contains('hover-glow') ||
-                          target.tagName === 'SVG' ||
-                          target.closest('svg');
+      const isClickable = element.closest('a, button, [role="button"], input, textarea, select') ||
+                          element.tagName === 'A' || 
+                          element.tagName === 'BUTTON' || 
+                          element.classList.contains('hover-glow') ||
+                          element.tagName === 'SVG' ||
+                          element.closest('svg');
       
       // Check if we're over a scrollable area
-      const isScrollable = target.closest('.modal-scrollbar') ||
-                           target.classList.contains('modal-scrollbar') ||
-                           getComputedStyle(target).overflowY === 'auto' ||
-                           getComputedStyle(target).overflowY === 'scroll';
+      const isScrollable = element.closest('.modal-scrollbar') ||
+                           element.classList.contains('modal-scrollbar') ||
+                           getComputedStyle(element).overflowY === 'auto' ||
+                           getComputedStyle(element).overflowY === 'scroll';
       
       if (isClickable || isScrollable) {
         cursor.classList.add('hover');
@@ -95,7 +96,6 @@ export default function Home() {
     };
 
     const handleMouseOut = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
       const relatedTarget = e.relatedTarget as HTMLElement;
       
       // Don't remove hover if we're still within a scrollable area
@@ -230,13 +230,13 @@ export default function Home() {
             </div>
             <div>
               <p className="mb-4">
-                I'm a 2nd year Software Development student at Bournemouth University. I spend most of my time building things for the web and learning new technologies. When I'm not studying, I'm usually working on side projects or figuring out how to make Discord bots do interesting things.
+                I&apos;m a 2nd year Software Development student at Bournemouth University. I spend most of my time building things for the web and learning new technologies. When I&apos;m not studying, I&apos;m usually working on side projects or figuring out how to make Discord bots do interesting things.
               </p>
               <p className="mb-4">
                 My journey in software development has already led me to work on diverse projects, including developing a website for a client and creating two personal projects that showcase my growing skills in web development and software engineering. I enjoy the challenge of turning ideas into functional, user-friendly applications.
               </p>
               <p>
-                When I'm not coding for university or client work, I'm usually exploring new technologies, contributing to personal projects, or learning about emerging trends in software development and web technologies.
+                When I&apos;m not coding for university or client work, I&apos;m usually exploring new technologies, contributing to personal projects, or learning about emerging trends in software development and web technologies.
               </p>
             </div>
           </section>
@@ -355,7 +355,7 @@ export default function Home() {
                     </div>
                     <div className="z-10 order-0 sm:order-1 sm:col-span-2 mb-4 sm:mb-0">
                       <div className="rounded border-2 border-slate-200/10 transition group-hover:border-slate-200/30 sm:order-1 sm:col-span-2 sm:translate-y-1">
-                        <img src="/Ashe_Hawkshot.webp" alt="Hawkshot Discord Bot" className="h-16 w-full object-cover rounded" />
+                        <Image src="/Ashe_Hawkshot.webp" alt="Hawkshot Discord Bot" width={256} height={64} className="h-16 w-full object-cover rounded" />
                       </div>
                     </div>
                   </div>
@@ -377,7 +377,7 @@ export default function Home() {
                           </span>
                         </a>
                       </h3>
-                      <p className="mt-2 text-sm leading-normal">A website committed to Honkai Impact 3rd's Characters, Weapons and Meta. Comprehensive resource for game information and community guides.</p>
+                      <p className="mt-2 text-sm leading-normal">A website committed to Honkai Impact 3rd&apos;s Characters, Weapons and Meta. Comprehensive resource for game information and community guides.</p>
                       <ul className="mt-2 flex flex-wrap" aria-label="Technologies used:">
                         <li className="mr-1.5 mt-2">
                           <div className="flex items-center rounded-full bg-teal-400/10 px-3 py-1 text-xs font-medium leading-5 text-teal-300">Web Development</div>
@@ -392,7 +392,7 @@ export default function Home() {
                     </div>
                     <div className="z-10 order-0 sm:order-1 sm:col-span-2 mb-4 sm:mb-0">
                       <div className="rounded border-2 border-slate-200/10 transition group-hover:border-slate-200/30 sm:order-1 sm:col-span-2 sm:translate-y-1">
-                        <img src="/honkaime.png" alt="Honkai.me Website" className="h-16 w-full object-cover rounded" />
+                        <Image src="/honkaime.png" alt="Honkai.me Website" width={256} height={64} className="h-16 w-full object-cover rounded" />
                       </div>
                     </div>
                   </div>
@@ -430,7 +430,7 @@ export default function Home() {
                     <div className="z-10 order-0 sm:order-1 sm:col-span-2 mb-4 sm:mb-0">
                       <div className="rounded border-2 border-slate-200/10 transition group-hover:border-slate-200/30 sm:order-1 sm:col-span-2 sm:translate-y-1">
                         <div className="h-16 w-full bg-white rounded flex items-center justify-center p-2">
-                          <img src="/D-London-blacksolologo.webp" alt="D.London Fashion Brand Logo" className="h-full w-auto object-contain" />
+                          <Image src="/D-London-blacksolologo.webp" alt="D.London Fashion Brand Logo" width={256} height={64} className="h-full w-auto object-contain" />
                         </div>
                       </div>
                     </div>
@@ -534,7 +534,7 @@ export default function Home() {
           <div className={`bg-slate-800 rounded-lg p-4 sm:p-8 max-w-md sm:max-w-2xl w-full mx-4 border border-slate-700 max-h-[90vh] overflow-y-auto modal-scrollbar ${isClosingModal ? 'animate-scale-out' : 'animate-scale-in'}`} onClick={(e) => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-4 sm:mb-6">
               <div className="flex items-center gap-3">
-                <img src="/Ashe_Hawkshot.webp" alt="Hawkshot Bot" className="w-8 h-8 sm:w-10 sm:h-10 object-cover rounded-full border-2 border-slate-600" />
+                <Image src="/Ashe_Hawkshot.webp" alt="Hawkshot Bot" width={40} height={40} className="w-8 h-8 sm:w-10 sm:h-10 object-cover rounded-full border-2 border-slate-600" />
                 <h2 className="text-lg sm:text-2xl font-bold text-slate-200">Hawkshot Discord Bot</h2>
               </div>
               <button 
@@ -580,7 +580,7 @@ export default function Home() {
                   Use <code className="bg-slate-700 px-2 py-1 rounded text-teal-300">/watch</code> to automatically track and get notified when players start or finish their League of Legends and TFT games.
                 </p>
                 <div className="bg-slate-700 rounded-lg p-3 border border-slate-600 max-w-md mx-auto">
-                  <img src="/watch.png" alt="Hawkshot Watch Command Example" className="w-full rounded border border-slate-600" />
+                  <Image src="/watch.png" alt="Hawkshot Watch Command Example" width={400} height={300} className="w-full rounded border border-slate-600" />
                 </div>
               </div>
               
@@ -591,7 +591,7 @@ export default function Home() {
                   Use <code className="bg-slate-700 px-2 py-1 rounded text-teal-300">/profile</code> to view detailed League of Legends statistics and match history.
                 </p>
                 <div className="bg-slate-700 rounded-lg p-3 border border-slate-600 max-w-md mx-auto">
-                  <img src="/hawkshotprofile.png" alt="Hawkshot Profile Command Example" className="w-full rounded border border-slate-600" />
+                  <Image src="/hawkshotprofile.png" alt="Hawkshot Profile Command Example" width={400} height={300} className="w-full rounded border border-slate-600" />
                 </div>
               </div>
             </div>
@@ -638,7 +638,7 @@ export default function Home() {
               
               {/* Riot Games Disclaimer */}
               <p className="text-xs text-slate-500 text-center mt-4 leading-relaxed">
-                Hawkshot isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.
+                Hawkshot isn&apos;t endorsed by Riot Games and doesn&apos;t reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.
               </p>
             </div>
           </div>

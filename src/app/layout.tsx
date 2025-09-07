@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DevSite - Modern Developer Website",
+  title: "Kirubel Mulat | Student",
   description: "A modern developer website built with Next.js, TypeScript, and Tailwind CSS. Showcase your projects and connect with the community.",
 };
 

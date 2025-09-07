@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 export default function PrivacyPolicy() {
   const [isClient, setIsClient] = useState(false);
@@ -122,14 +123,14 @@ export default function PrivacyPolicy() {
               <div>
                 <h3 className="text-lg font-medium text-slate-200 mb-2">Riot Games API</h3>
                 <p className="text-slate-300 leading-relaxed">
-                  We use Riot Games API to fetch game data. This data is subject to Riot Games' privacy policy and terms of service.
+                  We use Riot Games API to fetch game data. This data is subject to Riot Games&apos; privacy policy and terms of service.
                 </p>
               </div>
               
               <div>
                 <h3 className="text-lg font-medium text-slate-200 mb-2">Discord</h3>
                 <p className="text-slate-300 leading-relaxed">
-                  Our bot operates on Discord's platform and is subject to Discord's privacy policy and terms of service.
+                  Our bot operates on Discord&apos;s platform and is subject to Discord&apos;s privacy policy and terms of service.
                 </p>
               </div>
             </div>
@@ -156,20 +157,20 @@ export default function PrivacyPolicy() {
           <section>
             <h2 className="text-2xl font-semibold text-slate-200 mb-4">8. Changes to This Policy</h2>
             <p className="text-slate-300 leading-relaxed">
-              We may update this Privacy Policy from time to time. We will notify users of any material changes by posting the new Privacy Policy on this page and updating the "Last updated" date.
+              We may update this Privacy Policy from time to time. We will notify users of any material changes by posting the new Privacy Policy on this page and updating the &quot;Last updated&quot; date.
             </p>
           </section>
         </div>
 
         <div className="mt-12 text-center">
-          <a href="/" className="inline-flex items-center px-6 py-3 text-sm font-medium text-slate-900 bg-teal-400 rounded-md hover:bg-teal-300 transition-all duration-300 transform hover:scale-105">
+          <Link href="/" className="inline-flex items-center px-6 py-3 text-sm font-medium text-slate-900 bg-teal-400 rounded-md hover:bg-teal-300 transition-all duration-300 transform hover:scale-105">
             ← Return to Hawkshot
-          </a>
+          </Link>
         </div>
 
         <div className="mt-12 pt-8 border-t border-slate-700">
           <p className="text-sm text-slate-500 text-center">
-            Hawkshot isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.
+            Hawkshot isn&apos;t endorsed by Riot Games and doesn&apos;t reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.
           </p>
         </div>
       </div>
