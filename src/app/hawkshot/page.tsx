@@ -12,7 +12,7 @@ export default function HawkshotRedirect() {
   }, [router]);
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-300 font-mono flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-900 to-black text-slate-300 font-mono flex items-center justify-center">
       <div className="text-center">
         <h1 className="text-2xl font-bold text-slate-200 mb-4">Loading Hawkshot...</h1>
         <p className="text-slate-400">Redirecting to main page...</p>

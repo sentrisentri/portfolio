@@ -24,11 +24,12 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: '/favicon.svg', type: 'image/svg+xml' },
-      { url: '/favicon.ico', type: 'image/x-icon' }
+      { url: '/icon.svg', sizes: '192x192', type: 'image/svg+xml' }
     ],
     apple: [
       { url: '/icon.svg', type: 'image/svg+xml' }
     ],
+    shortcut: '/favicon.svg',
   },
   openGraph: {
     title: "Kirubel Mulat | Student Software Engineer",
