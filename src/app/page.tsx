@@ -7,6 +7,7 @@ export default function Home() {
   const [showHawkshotModal, setShowHawkshotModal] = useState(false);
   const [isClosingModal, setIsClosingModal] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const [activeSection, setActiveSection] = useState('about');
 
   // Ensure we're on the client side
   useEffect(() => {
@@ -134,8 +135,31 @@ export default function Home() {
     };
   }, [isClient]);
 
+  // Scroll tracking effect for navigation highlighting
+  useEffect(() => {
+    if (!isClient) return;
+
+    const handleScroll = () => {
+      const sections = ['about', 'education', 'projects', 'university-projects'];
+      const scrollPosition = window.scrollY + window.innerHeight / 3;
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = document.getElementById(sections[i]);
+        if (section && section.offsetTop <= scrollPosition) {
+          setActiveSection(sections[i]);
+          break;
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Call once to set initial state
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isClient]);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-900 to-black text-slate-300 font-mono">
+    <div className="min-h-screen bg-gradient-to-br from-slate-800 via-slate-900 to-black text-slate-300 font-mono">
       <div className="lg:flex lg:justify-between lg:gap-4 mx-auto min-h-screen max-w-screen-xl px-6 py-12 md:px-12 md:py-20 lg:px-24 lg:py-0">
         
         {/* Left Side - Fixed Header */}
@@ -155,33 +179,33 @@ export default function Home() {
             <nav className="nav hidden lg:block" aria-label="In-page jump links">
               <ul className="mt-16 w-max">
                 <li>
-                  <a className="group flex items-center py-3 active" href="#about">
-                    <span className="nav-indicator mr-4 h-px w-8 bg-slate-600 transition-all group-hover:w-16 group-hover:bg-slate-200 group-focus-visible:w-16 group-focus-visible:bg-slate-200 motion-reduce:transition-none"></span>
-                    <span className="nav-text text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-200 group-focus-visible:text-slate-200">
+                  <a className={`group flex items-center py-3 ${activeSection === 'about' ? 'active' : ''}`} href="#about">
+                    <span className={`nav-indicator mr-4 h-px transition-all group-hover:w-16 group-hover:bg-slate-200 group-focus-visible:w-16 group-focus-visible:bg-slate-200 motion-reduce:transition-none ${activeSection === 'about' ? 'w-16 bg-slate-200' : 'w-8 bg-slate-600'}`}></span>
+                    <span className={`nav-text text-xs font-bold uppercase tracking-widest group-hover:text-slate-200 group-focus-visible:text-slate-200 ${activeSection === 'about' ? 'text-slate-200' : 'text-slate-500'}`}>
                       About
                     </span>
                   </a>
                 </li>
                 <li>
-                  <a className="group flex items-center py-3" href="#education">
-                    <span className="nav-indicator mr-4 h-px w-8 bg-slate-600 transition-all group-hover:w-16 group-hover:bg-slate-200 group-focus-visible:w-16 group-focus-visible:bg-slate-200 motion-reduce:transition-none"></span>
-                    <span className="nav-text text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-200 group-focus-visible:text-slate-200">
+                  <a className={`group flex items-center py-3 ${activeSection === 'education' ? 'active' : ''}`} href="#education">
+                    <span className={`nav-indicator mr-4 h-px transition-all group-hover:w-16 group-hover:bg-slate-200 group-focus-visible:w-16 group-focus-visible:bg-slate-200 motion-reduce:transition-none ${activeSection === 'education' ? 'w-16 bg-slate-200' : 'w-8 bg-slate-600'}`}></span>
+                    <span className={`nav-text text-xs font-bold uppercase tracking-widest group-hover:text-slate-200 group-focus-visible:text-slate-200 ${activeSection === 'education' ? 'text-slate-200' : 'text-slate-500'}`}>
                       Education
                     </span>
                   </a>
                 </li>
                 <li>
-                  <a className="group flex items-center py-3" href="#projects">
-                    <span className="nav-indicator mr-4 h-px w-8 bg-slate-600 transition-all group-hover:w-16 group-hover:bg-slate-200 group-focus-visible:w-16 group-focus-visible:bg-slate-200 motion-reduce:transition-none"></span>
-                    <span className="nav-text text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-200 group-focus-visible:text-slate-200">
+                  <a className={`group flex items-center py-3 ${activeSection === 'projects' ? 'active' : ''}`} href="#projects">
+                    <span className={`nav-indicator mr-4 h-px transition-all group-hover:w-16 group-hover:bg-slate-200 group-focus-visible:w-16 group-focus-visible:bg-slate-200 motion-reduce:transition-none ${activeSection === 'projects' ? 'w-16 bg-slate-200' : 'w-8 bg-slate-600'}`}></span>
+                    <span className={`nav-text text-xs font-bold uppercase tracking-widest group-hover:text-slate-200 group-focus-visible:text-slate-200 ${activeSection === 'projects' ? 'text-slate-200' : 'text-slate-500'}`}>
                       Personal Projects
                     </span>
                   </a>
                 </li>
                 <li>
-                  <a className="group flex items-center py-3" href="#university-projects">
-                    <span className="nav-indicator mr-4 h-px w-8 bg-slate-600 transition-all group-hover:w-16 group-hover:bg-slate-200 group-focus-visible:w-16 group-focus-visible:bg-slate-200 motion-reduce:transition-none"></span>
-                    <span className="nav-text text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-200 group-focus-visible:text-slate-200">
+                  <a className={`group flex items-center py-3 ${activeSection === 'university-projects' ? 'active' : ''}`} href="#university-projects">
+                    <span className={`nav-indicator mr-4 h-px transition-all group-hover:w-16 group-hover:bg-slate-200 group-focus-visible:w-16 group-focus-visible:bg-slate-200 motion-reduce:transition-none ${activeSection === 'university-projects' ? 'w-16 bg-slate-200' : 'w-8 bg-slate-600'}`}></span>
+                    <span className={`nav-text text-xs font-bold uppercase tracking-widest group-hover:text-slate-200 group-focus-visible:text-slate-200 ${activeSection === 'university-projects' ? 'text-slate-200' : 'text-slate-500'}`}>
                       University Projects
                     </span>
                   </a>
@@ -225,7 +249,7 @@ export default function Home() {
           
           {/* About Section */}
           <section id="about" className="mb-16 scroll-mt-16 md:mb-24 lg:mb-36 lg:scroll-mt-24" aria-label="About me">
-            <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-gradient-to-r from-slate-900/75 to-black/75 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
+            <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-gradient-to-r from-slate-800/75 to-black/75 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
               <h2 className="text-sm font-bold uppercase tracking-widest text-slate-200 lg:sr-only">About</h2>
             </div>
             <div>
@@ -243,7 +267,7 @@ export default function Home() {
 
           {/* Education Section */}
           <section id="education" className="mb-16 scroll-mt-16 md:mb-24 lg:mb-36 lg:scroll-mt-24" aria-label="Education">
-            <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-gradient-to-r from-slate-900/75 to-black/75 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
+            <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-gradient-to-r from-slate-800/75 to-black/75 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
               <h2 className="text-sm font-bold uppercase tracking-widest text-slate-200 lg:sr-only">Education</h2>
             </div>
             <div>
@@ -259,9 +283,14 @@ export default function Home() {
                       </header>
                       <h3 className="font-medium leading-snug text-slate-200">
                         <div>
-                          <a className="inline-flex items-baseline font-medium leading-tight text-slate-200 hover:text-teal-300 focus-visible:text-teal-300 group/link text-base" href="#" target="_blank" rel="noreferrer noopener" aria-label="Software Engineering BSc at Bournemouth University (opens in a new tab)">
+                          <a className="inline-flex items-baseline font-medium leading-tight text-slate-200 hover:text-teal-300 focus-visible:text-teal-300 group/link text-base" href="https://www.bournemouth.ac.uk/" target="_blank" rel="noreferrer noopener" aria-label="Software Engineering BSc at Bournemouth University (opens in a new tab)">
                             <span className="absolute -inset-x-4 -inset-y-2.5 hidden rounded md:-inset-x-6 md:-inset-y-4 lg:block"></span>
                             <span>Software Engineering BSc · Bournemouth University</span>
+                            <span className="inline-block">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="inline-block h-4 w-4 shrink-0 transition-transform group-hover/link:-translate-y-1 group-hover/link:translate-x-1 group-focus-visible/link:-translate-y-1 group-focus-visible/link:translate-x-1 motion-reduce:transition-none ml-1 translate-y-px" aria-hidden="true">
+                                <path fillRule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clipRule="evenodd"></path>
+                              </svg>
+                            </span>
                           </a>
                         </div>
                       </h3>
@@ -293,9 +322,15 @@ export default function Home() {
                       </header>
                       <h3 className="font-medium leading-snug text-slate-200">
                         <div>
-                          <span className="inline-flex items-baseline font-medium leading-tight text-slate-200 text-base">
-                            A-Levels · Coopers School
-                          </span>
+                          <a className="inline-flex items-baseline font-medium leading-tight text-slate-200 hover:text-teal-300 focus-visible:text-teal-300 group/link text-base" href="https://www.orioncoopers.org.uk/" target="_blank" rel="noreferrer noopener" aria-label="A-Levels at Coopers School (opens in a new tab)">
+                            <span className="absolute -inset-x-4 -inset-y-2.5 hidden rounded md:-inset-x-6 md:-inset-y-4 lg:block"></span>
+                            <span>A-Levels · Coopers School</span>
+                            <span className="inline-block">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="inline-block h-4 w-4 shrink-0 transition-transform group-hover/link:-translate-y-1 group-hover/link:translate-x-1 group-focus-visible/link:-translate-y-1 group-focus-visible/link:translate-x-1 motion-reduce:transition-none ml-1 translate-y-px" aria-hidden="true">
+                                <path fillRule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clipRule="evenodd"></path>
+                              </svg>
+                            </span>
+                          </a>
                         </div>
                       </h3>
                       <p className="mt-2 text-sm leading-normal">
@@ -318,7 +353,7 @@ export default function Home() {
 
           {/* Personal Projects Section */}
           <section id="projects" className="mb-16 scroll-mt-16 md:mb-24 lg:mb-36 lg:scroll-mt-24" aria-label="Selected personal projects">
-            <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-gradient-to-r from-slate-900/75 to-black/75 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
+            <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-gradient-to-r from-slate-800/75 to-black/75 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
               <h2 className="text-sm font-bold uppercase tracking-widest text-slate-200 lg:sr-only">Personal Projects</h2>
             </div>
             <div>
@@ -442,7 +477,7 @@ export default function Home() {
 
           {/* University Projects Section */}
           <section id="university-projects" className="mb-16 scroll-mt-16 md:mb-24 lg:mb-36 lg:scroll-mt-24" aria-label="University projects">
-            <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-gradient-to-r from-slate-900/75 to-black/75 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
+            <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-gradient-to-r from-slate-800/75 to-black/75 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
               <h2 className="text-sm font-bold uppercase tracking-widest text-slate-200 lg:sr-only">University Projects</h2>
             </div>
             <div>
