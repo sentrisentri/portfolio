@@ -159,7 +159,7 @@ export default function Home() {
   }, [isClient]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-800 via-slate-900 to-black text-slate-300 font-mono">
+    <div className="min-h-screen bg-gradient-to-br from-slate-800 via-slate-900 to-black text-slate-300 font-sans">
       <div className="lg:flex lg:justify-between lg:gap-4 mx-auto min-h-screen max-w-screen-xl px-6 py-12 md:px-12 md:py-20 lg:px-24 lg:py-0">
         
         {/* Left Side - Fixed Header */}
