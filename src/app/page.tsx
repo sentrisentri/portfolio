@@ -525,7 +525,7 @@ export default function Home() {
                           </a>
                         </div>
                       </h3>
-                      <p className="mt-2 text-sm leading-normal">An AI-powered chatbot developed as a collaborative group project that simulates conversations with Alan Turing, the father of computer science. This interactive application combines natural language processing with historical knowledge to create an engaging educational experience about Turing's life and contributions to computing.</p>
+                      <p className="mt-2 text-sm leading-normal">An AI-powered chatbot developed as a collaborative group project that simulates conversations with Alan Turing, the father of computer science. This interactive application combines natural language processing with historical knowledge to create an engaging educational experience about Turing&apos;s life and contributions to computing.</p>
                       <ul className="mt-2 flex flex-wrap" aria-label="Technologies used:">
                         <li className="mr-1.5 mt-2">
                           <div className="flex items-center rounded-full bg-teal-400/10 px-3 py-1 text-xs font-medium leading-5 text-teal-300">AI/NLP</div>
