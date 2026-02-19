@@ -155,6 +155,37 @@ body {
   animation: scale-out 0.2s ease-out;
 }
 
+/* Mudae gallery slide animations */
+@keyframes slide-left-in {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-right-in {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-left {
+  animation: slide-left-in 0.3s ease-out;
+}
+
+.animate-slide-right {
+  animation: slide-right-in 0.3s ease-out;
+}
+
 /* Custom scrollbar styling for modal */
 .modal-scrollbar::-webkit-scrollbar {
   width: 8px;
