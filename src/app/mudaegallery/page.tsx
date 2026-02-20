@@ -17,10 +17,12 @@ export default function MudaeGalleryPage() {
   const [carouselShift, setCarouselShift] = useState(0);
   const [isCarouselAnimating, setIsCarouselAnimating] = useState(false);
   const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null);
-  const [backgroundStyle, setBackgroundStyle] = useState('bg-gradient-to-br from-slate-800 via-slate-900 to-black');
+  const [backgroundStyle, setBackgroundStyle] = useState('bg-slate-900');
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [adaptiveColor, setAdaptiveColor] = useState<string | null>(null);
   const slideTimeoutRef = useRef<number | null>(null);
   const carouselTimeoutRef = useRef<number | null>(null);
+  const mainImageRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -157,6 +159,47 @@ export default function MudaeGalleryPage() {
     [collections]
   );
 
+  const backgroundClass = backgroundStyle === 'adaptive' ? '' : backgroundStyle;
+  const adaptiveStyle = backgroundStyle === 'adaptive' && adaptiveColor
+    ? { backgroundColor: adaptiveColor }
+    : undefined;
+
+  const extractAverageColor = (image: HTMLImageElement) => {
+    try {
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      if (!context) return null;
+
+      const size = 32;
+      canvas.width = size;
+      canvas.height = size;
+      context.drawImage(image, 0, 0, size, size);
+
+      const data = context.getImageData(0, 0, size, size).data;
+      let r = 0;
+      let g = 0;
+      let b = 0;
+      let count = 0;
+
+      for (let i = 0; i < data.length; i += 4) {
+        r += data[i];
+        g += data[i + 1];
+        b += data[i + 2];
+        count += 1;
+      }
+
+      if (!count) return null;
+      const factor = 0.35;
+      const avgR = Math.round((r / count) * factor);
+      const avgG = Math.round((g / count) * factor);
+      const avgB = Math.round((b / count) * factor);
+
+      return `rgb(${avgR}, ${avgG}, ${avgB})`;
+    } catch {
+      return null;
+    }
+  };
+
   useEffect(() => {
     if (!collections.length) return;
 
@@ -166,6 +209,38 @@ export default function MudaeGalleryPage() {
       preloadImage.src = getImageUrl(collection.imageUrl) ?? '';
     });
   }, [collectionUrlsKey]);
+
+  useEffect(() => {
+    if (backgroundStyle !== 'adaptive') {
+      setAdaptiveColor(null);
+      return;
+    }
+
+    if (!selectedCharacter?.imageUrl) {
+      setAdaptiveColor(null);
+      return;
+    }
+
+    const imageElement = mainImageRef.current;
+    const isGif = /\.gif(\?|$)/i.test(selectedCharacter.imageUrl);
+
+    const updateColor = () => {
+      if (!imageElement || !imageElement.complete) return;
+      const color = extractAverageColor(imageElement);
+      if (color) {
+        setAdaptiveColor(color);
+      }
+    };
+
+    updateColor();
+
+    if (isGif) {
+      const intervalId = window.setInterval(updateColor, 500);
+      return () => window.clearInterval(intervalId);
+    }
+
+    return undefined;
+  }, [backgroundStyle, selectedCharacter?.imageUrl]);
 
   const animateCarouselToIndex = (nextIndex: number, delta: number) => {
     if (!collections.length || delta === 0) return;
@@ -203,7 +278,10 @@ export default function MudaeGalleryPage() {
   };
 
   return (
-    <div className={`min-h-screen text-slate-300 font-sans animate-fade-in ${backgroundStyle}`}>
+    <div
+      className={`min-h-screen text-slate-300 font-sans animate-fade-in ${backgroundClass} bg-[radial-gradient(circle_at_bottom_right,rgba(0,0,0,0.85),transparent_60%)]`}
+      style={adaptiveStyle}
+    >
       <div className={`mx-auto flex min-h-screen w-full max-w-6xl flex-col px-1 ${isFullscreen ? 'py-2' : 'py-16'} md:px-2 lg:px-2`}>
         <div className={`flex flex-wrap items-center justify-between gap-4 ${isFullscreen ? 'mb-2' : 'mb-10'}`}>
           {!isFullscreen && (
@@ -279,17 +357,18 @@ export default function MudaeGalleryPage() {
                 </div>
                 <div className={`flex w-full items-center justify-center ${isFullscreen ? 'h-[820px] mt-0' : 'h-[560px] mt-4'}`}>
                   {selectedCharacter?.imageUrl ? (
-                    <img
-                      src={getImageUrl(selectedCharacter.imageUrl)}
-                      alt={selectedCharacter.name}
-                      className={`h-full w-auto max-w-none object-contain ${
-                        slideDirection === 'left'
-                          ? 'animate-slide-left'
-                          : slideDirection === 'right'
-                            ? 'animate-slide-right'
-                            : ''
-                      }`}
-                    />
+                      <img
+                        ref={mainImageRef}
+                        src={getImageUrl(selectedCharacter.imageUrl)}
+                        alt={selectedCharacter.name}
+                        className={`h-full w-auto max-w-none object-contain ${
+                          slideDirection === 'left'
+                            ? 'animate-slide-left'
+                            : slideDirection === 'right'
+                              ? 'animate-slide-right'
+                              : ''
+                        }`}
+                      />
                   ) : (
                     <div className="h-full w-full rounded-xl bg-gradient-to-br from-teal-500/20 via-slate-700/30 to-black/40"></div>
                   )}
@@ -376,113 +455,124 @@ export default function MudaeGalleryPage() {
                       <h3 className="text-xs font-bold uppercase tracking-widest text-slate-200">Background</h3>
                     </div>
                     <div className="flex flex-wrap gap-3">
+                      <button
+                        type="button"
+                        className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${
+                          backgroundStyle === 'adaptive'
+                            ? 'border-teal-300/60 bg-teal-400/10 text-teal-200'
+                            : 'border-slate-200/20 text-slate-300 hover:border-slate-200/40'
+                        }`}
+                        onClick={() => setBackgroundStyle('adaptive')}
+                      >
+                        Adaptive
+                      </button>
                     <button
                       type="button"
                       className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${
-                        backgroundStyle === 'bg-gradient-to-br from-slate-800 via-slate-900 to-black'
+                        backgroundStyle === 'bg-slate-900'
                           ? 'border-teal-300/60 bg-teal-400/10 text-teal-200'
                           : 'border-slate-200/20 text-slate-300 hover:border-slate-200/40'
                       }`}
-                      onClick={() => setBackgroundStyle('bg-gradient-to-br from-slate-800 via-slate-900 to-black')}
+                      onClick={() => setBackgroundStyle('bg-slate-900')}
                     >
                       Default
                     </button>
                     <button
                       type="button"
                       className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${
-                        backgroundStyle === 'bg-gradient-to-br from-black via-slate-950 to-black'
+                        backgroundStyle === 'bg-black'
                           ? 'border-teal-300/60 bg-teal-400/10 text-teal-200'
                           : 'border-slate-200/20 text-slate-300 hover:border-slate-200/40'
                       }`}
-                      onClick={() => setBackgroundStyle('bg-gradient-to-br from-black via-slate-950 to-black')}
+                      onClick={() => setBackgroundStyle('bg-black')}
                     >
                       Black
                     </button>
                     <button
                       type="button"
                       className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${
-                        backgroundStyle === 'bg-gradient-to-br from-slate-900 via-emerald-950 to-black'
+                        backgroundStyle === 'bg-emerald-950'
                           ? 'border-teal-300/60 bg-teal-400/10 text-teal-200'
                           : 'border-slate-200/20 text-slate-300 hover:border-slate-200/40'
                       }`}
-                      onClick={() => setBackgroundStyle('bg-gradient-to-br from-slate-900 via-emerald-950 to-black')}
+                      onClick={() => setBackgroundStyle('bg-emerald-950')}
                     >
                       Emerald
                     </button>
                     <button
                       type="button"
                       className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${
-                        backgroundStyle === 'bg-gradient-to-br from-slate-900 via-cyan-950 to-black'
+                        backgroundStyle === 'bg-cyan-950'
                           ? 'border-teal-300/60 bg-teal-400/10 text-teal-200'
                           : 'border-slate-200/20 text-slate-300 hover:border-slate-200/40'
                       }`}
-                      onClick={() => setBackgroundStyle('bg-gradient-to-br from-slate-900 via-cyan-950 to-black')}
+                      onClick={() => setBackgroundStyle('bg-cyan-950')}
                     >
                       Cyan
                     </button>
                     <button
                       type="button"
                       className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${
-                        backgroundStyle === 'bg-gradient-to-br from-slate-900 via-sky-950 to-black'
+                        backgroundStyle === 'bg-sky-950'
                           ? 'border-teal-300/60 bg-teal-400/10 text-teal-200'
                           : 'border-slate-200/20 text-slate-300 hover:border-slate-200/40'
                       }`}
-                      onClick={() => setBackgroundStyle('bg-gradient-to-br from-slate-900 via-sky-950 to-black')}
+                      onClick={() => setBackgroundStyle('bg-sky-950')}
                     >
                       Sky
                     </button>
                     <button
                       type="button"
                       className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${
-                        backgroundStyle === 'bg-gradient-to-br from-slate-900 via-violet-950 to-black'
+                        backgroundStyle === 'bg-violet-950'
                           ? 'border-teal-300/60 bg-teal-400/10 text-teal-200'
                           : 'border-slate-200/20 text-slate-300 hover:border-slate-200/40'
                       }`}
-                      onClick={() => setBackgroundStyle('bg-gradient-to-br from-slate-900 via-violet-950 to-black')}
+                      onClick={() => setBackgroundStyle('bg-violet-950')}
                     >
                       Violet
                     </button>
                     <button
                       type="button"
                       className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${
-                        backgroundStyle === 'bg-gradient-to-br from-slate-900 via-rose-950 to-black'
+                        backgroundStyle === 'bg-rose-950'
                           ? 'border-teal-300/60 bg-teal-400/10 text-teal-200'
                           : 'border-slate-200/20 text-slate-300 hover:border-slate-200/40'
                       }`}
-                      onClick={() => setBackgroundStyle('bg-gradient-to-br from-slate-900 via-rose-950 to-black')}
+                      onClick={() => setBackgroundStyle('bg-rose-950')}
                     >
                       Rose
                     </button>
                     <button
                       type="button"
                       className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${
-                        backgroundStyle === 'bg-gradient-to-br from-slate-900 via-amber-950 to-black'
+                        backgroundStyle === 'bg-amber-950'
                           ? 'border-teal-300/60 bg-teal-400/10 text-teal-200'
                           : 'border-slate-200/20 text-slate-300 hover:border-slate-200/40'
                       }`}
-                      onClick={() => setBackgroundStyle('bg-gradient-to-br from-slate-900 via-amber-950 to-black')}
+                      onClick={() => setBackgroundStyle('bg-amber-950')}
                     >
                       Amber
                     </button>
                     <button
                       type="button"
                       className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${
-                        backgroundStyle === 'bg-gradient-to-br from-slate-900 via-fuchsia-950 to-black'
+                        backgroundStyle === 'bg-fuchsia-950'
                           ? 'border-teal-300/60 bg-teal-400/10 text-teal-200'
                           : 'border-slate-200/20 text-slate-300 hover:border-slate-200/40'
                       }`}
-                      onClick={() => setBackgroundStyle('bg-gradient-to-br from-slate-900 via-fuchsia-950 to-black')}
+                      onClick={() => setBackgroundStyle('bg-fuchsia-950')}
                     >
                       Fuchsia
                     </button>
                     <button
                       type="button"
                       className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${
-                        backgroundStyle === 'bg-gradient-to-br from-slate-900 via-indigo-950 to-black'
+                        backgroundStyle === 'bg-indigo-950'
                           ? 'border-teal-300/60 bg-teal-400/10 text-teal-200'
                           : 'border-slate-200/20 text-slate-300 hover:border-slate-200/40'
                       }`}
-                      onClick={() => setBackgroundStyle('bg-gradient-to-br from-slate-900 via-indigo-950 to-black')}
+                      onClick={() => setBackgroundStyle('bg-indigo-950')}
                     >
                       Indigo
                     </button>
