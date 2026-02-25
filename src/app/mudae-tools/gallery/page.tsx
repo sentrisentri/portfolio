@@ -9,7 +9,7 @@ type Collection = {
   imageUrl?: string;
 };
 
-export default function MudaeGalleryPage() {
+export default function MudaeToolsPage() {
   const [rawInput, setRawInput] = useState('');
   const [collections, setCollections] = useState<Collection[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
