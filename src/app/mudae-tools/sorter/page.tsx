@@ -7,6 +7,7 @@ type SorterEntry = {
   id: string;
   name: string;
   imageUrl?: string;
+  kakera?: string;
 };
 
 export default function MudaeSorterPage() {
@@ -17,6 +18,7 @@ export default function MudaeSorterPage() {
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [exportOutput, setExportOutput] = useState('');
   const [copyLabel, setCopyLabel] = useState('Copy');
+  const [mmkrCopyLabel, setMmkrCopyLabel] = useState('Copy $mmkr-a+i-s');
   const [isDivorceMode, setIsDivorceMode] = useState(false);
   const [selectedForDivorce, setSelectedForDivorce] = useState<string[]>([]);
   const [isTradeMode, setIsTradeMode] = useState(false);
@@ -90,11 +92,22 @@ export default function MudaeSorterPage() {
       .map((line) => line.trim())
       .filter(Boolean)
       .map((line, index) => {
-        const match = line.match(/^(.*?)\s*-\s*(https?:\/\/\S+)$/);
-        if (!match) return null;
+        const matchMmkr = line.match(/^#?[\d,]+\s*-\s*(.*?)\s+(\d[\d,]*)\s*ka\s*-\s*(https?:\/\/\S+)$/i);
+        const matchMmi = line.match(/^(.*?)\s*-\s*(https?:\/\/\S+)$/);
 
-        const name = match[1]?.trim();
-        const imageUrl = match[2]?.trim();
+        if (matchMmkr) {
+          const name = matchMmkr[1]?.trim();
+          const kakera = matchMmkr[2]?.trim();
+          const imageUrl = matchMmkr[3]?.trim();
+          if (!name || !imageUrl) return null;
+
+          return { id: `p-${index}`, name, imageUrl, kakera } as SorterEntry;
+        }
+
+        if (!matchMmi) return null;
+
+        const name = matchMmi[1]?.trim();
+        const imageUrl = matchMmi[2]?.trim();
         if (!name || !imageUrl) return null;
 
         return { id: `p-${index}`, name, imageUrl } as SorterEntry;
@@ -316,6 +329,17 @@ export default function MudaeSorterPage() {
     }
   };
 
+  const handleCopyMmkrCommand = async () => {
+    try {
+      await navigator.clipboard.writeText('$mmkr-a+i-s');
+      setMmkrCopyLabel('Copied');
+      window.setTimeout(() => setMmkrCopyLabel('Copy $mmkr-a+i-s'), 1200);
+    } catch {
+      setMmkrCopyLabel('Failed');
+      window.setTimeout(() => setMmkrCopyLabel('Copy $mmkr-a+i-s'), 1200);
+    }
+  };
+
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-slate-800 via-slate-900 to-black text-slate-300 font-sans animate-fade-in">
       <div
@@ -341,7 +365,7 @@ export default function MudaeSorterPage() {
             <div>
               <h2 className="text-sm font-bold uppercase tracking-widest text-slate-200">Paste Collection</h2>
               <p className="mt-2 text-sm text-slate-400">
-                Paste your mmi-s output lines in the format: Name - URL
+                Paste your $mmkr-a+i-s output lines in the format: #Rank - Name Kakera ka - URL
               </p>
             </div>
             <textarea
@@ -358,6 +382,13 @@ export default function MudaeSorterPage() {
                 disabled={!parsedPreview.length}
               >
                 Load {parsedPreview.length ? parsedPreview.length : ''} Cards
+              </button>
+              <button
+                className="rounded-full border border-slate-200/20 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-slate-300 transition hover:border-slate-200/40"
+                type="button"
+                onClick={handleCopyMmkrCommand}
+              >
+                {mmkrCopyLabel}
               </button>
               <button
                 className="rounded-full border border-slate-200/20 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-slate-300 transition hover:border-slate-200/40"
@@ -487,12 +518,15 @@ export default function MudaeSorterPage() {
                         No image
                       </div>
                     )}
-                    <div className="absolute left-1.5 top-1.5 rounded-full bg-black/70 px-1.5 py-0.5 text-[10px] font-semibold text-slate-100">
+                    <div className="absolute right-1.5 top-1.5 rounded-md bg-black/70 px-1.5 py-0.5 text-[10px] font-semibold text-slate-100">
                       #{index + 1}
                     </div>
                     {useCompactGrid && (
-                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-1.5 pb-1 pt-3 text-[10px] font-medium text-slate-100 truncate" title={entry.name}>
-                        {entry.name}
+                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-1.5 pb-1 pt-3 text-[10px] font-medium text-slate-100" title={entry.name}>
+                        {entry.kakera && (
+                          <div className="text-[9px] font-semibold text-teal-200">{entry.kakera} ka</div>
+                        )}
+                        <div className="truncate">{entry.name}</div>
                       </div>
                     )}
                   </div>
