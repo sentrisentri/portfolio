@@ -8,6 +8,7 @@ type SorterEntry = {
   name: string;
   imageUrl?: string;
   kakera?: string;
+  claimRank?: string;
 };
 
 export default function MudaeSorterPage() {
@@ -92,21 +93,22 @@ export default function MudaeSorterPage() {
       .map((line) => line.trim())
       .filter(Boolean)
       .map((line, index) => {
-        const matchMmkr = line.match(/^#?[\d,]+\s*-\s*(.*?)\s+(\d[\d,]*)\s*ka\s*-\s*(https?:\/\/\S+)$/i);
+        const matchMmkr = line.match(/^#?([\d,]+)\s*-\s*(.*?)\s+(\d[\d,]*)\s*ka\s*-\s*(https?:\/\/\S+)$/i);
         const matchMmi = line.match(/^(.*?)\s*-\s*(https?:\/\/\S+)$/);
 
         if (matchMmkr) {
-          const name = matchMmkr[1]?.trim();
-          const kakera = matchMmkr[2]?.trim();
-          const imageUrl = matchMmkr[3]?.trim();
+          const claimRank = matchMmkr[1]?.trim();
+          const name = matchMmkr[2]?.trim().replace(/\s+\d[\d,]*\s*ka\s*$/i, '');
+          const kakera = matchMmkr[3]?.trim();
+          const imageUrl = matchMmkr[4]?.trim();
           if (!name || !imageUrl) return null;
 
-          return { id: `p-${index}`, name, imageUrl, kakera } as SorterEntry;
+          return { id: `p-${index}`, name, imageUrl, kakera, claimRank } as SorterEntry;
         }
 
         if (!matchMmi) return null;
 
-        const name = matchMmi[1]?.trim();
+        const name = matchMmi[1]?.trim().replace(/\s+\d[\d,]*\s*ka\s*$/i, '');
         const imageUrl = matchMmi[2]?.trim();
         if (!name || !imageUrl) return null;
 
@@ -523,6 +525,9 @@ export default function MudaeSorterPage() {
                     </div>
                     {useCompactGrid && (
                       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-1.5 pb-1 pt-3 text-[10px] font-medium text-slate-100" title={entry.name}>
+                        {entry.claimRank && (
+                          <div className="text-[9px] font-semibold text-slate-300">Claim #{entry.claimRank}</div>
+                        )}
                         {entry.kakera && (
                           <div className="text-[9px] font-semibold text-teal-200">{entry.kakera} ka</div>
                         )}
@@ -531,8 +536,14 @@ export default function MudaeSorterPage() {
                     )}
                   </div>
                   {!useCompactGrid && (
-                    <div className="px-2 py-1.5 text-xs font-medium text-slate-200 truncate" title={entry.name}>
-                      {entry.name}
+                    <div className="px-2 py-1.5 text-xs font-medium text-slate-200" title={entry.name}>
+                      {entry.claimRank && (
+                        <div className="text-[10px] font-semibold text-slate-300">Claim #{entry.claimRank}</div>
+                      )}
+                      {entry.kakera && (
+                        <div className="text-[10px] font-semibold text-teal-200">{entry.kakera} ka</div>
+                      )}
+                      <div className="truncate">{entry.name}</div>
                     </div>
                   )}
                 </li>

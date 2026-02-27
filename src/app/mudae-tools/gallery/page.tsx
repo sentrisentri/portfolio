@@ -285,9 +285,9 @@ export default function MudaeToolsPage() {
       <div className={`mx-auto flex min-h-screen w-full max-w-6xl flex-col px-1 ${isFullscreen ? 'py-2' : 'py-16'} md:px-2 lg:px-2`}>
         <div className={`flex flex-wrap items-center justify-between gap-4 ${isFullscreen ? 'mb-2' : 'mb-10'}`}>
           {!isFullscreen && (
-            <Link className="inline-flex items-center text-sm font-medium text-teal-300 hover:text-teal-200" href="/">
+            <Link className="inline-flex items-center text-sm font-medium text-teal-300 hover:text-teal-200" href="/mudae-tools">
               <span className="mr-2">←</span>
-              Back to home
+              Back to Mudae Tools
             </Link>
           )}
           {hasLoaded && !isFullscreen && (
