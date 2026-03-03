@@ -318,7 +318,8 @@ export default function MudaeToolsPage() {
               </div>
               <textarea
                 className="min-h-[160px] w-full rounded-lg border border-slate-200/10 bg-slate-950/40 px-4 py-3 text-sm text-slate-200 placeholder:text-slate-500 focus:border-teal-400/60 focus:outline-none"
-                placeholder="Saber - https://mudae.net/uploads/...\nSamira - https://mudae.net/uploads/..."
+                placeholder={`Arlecchino - https://mudae.net/uploads/...
+Saber - https://mudae.net/uploads/...`}
                 value={rawInput}
                 onChange={(event) => setRawInput(event.target.value)}
               />

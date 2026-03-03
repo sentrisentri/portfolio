@@ -19,6 +19,8 @@ export default function MudaeSorterPage() {
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [exportOutput, setExportOutput] = useState('');
   const [copyLabel, setCopyLabel] = useState('Copy');
+  const [splitOutputs, setSplitOutputs] = useState<string[]>([]);
+  const [splitCopyLabels, setSplitCopyLabels] = useState<string[]>([]);
   const [mmkrCopyLabel, setMmkrCopyLabel] = useState('Copy $mmkr-a+i-s');
   const [isDivorceMode, setIsDivorceMode] = useState(false);
   const [selectedForDivorce, setSelectedForDivorce] = useState<string[]>([]);
@@ -122,6 +124,29 @@ export default function MudaeSorterPage() {
     if (!entries.length) return '';
     return `$sm ${entries.map((entry) => entry.name).join(' $ ')}`;
   }, [entries]);
+  const isSingleSmTooLong = exportCommand.length > 2000;
+
+  const buildSmCommands = (names: string[]): string[] => {
+    if (!names.length) return [];
+    const limit = 2000;
+    const commands: string[] = [];
+    let current = `$sm ${names[0]}`;
+    let lastAddedName = names[0];
+
+    for (let i = 1; i < names.length; i++) {
+      const attempt = `${current} $ ${names[i]}`;
+      if (attempt.length > limit) {
+        commands.push(current);
+        current = `$smpos ${lastAddedName} $ ${names[i]}`;
+        lastAddedName = names[i];
+      } else {
+        current = attempt;
+        lastAddedName = names[i];
+      }
+    }
+    commands.push(current);
+    return commands;
+  };
 
   const handleApply = () => {
     setEntries(parsedPreview);
@@ -129,6 +154,8 @@ export default function MudaeSorterPage() {
     setSelectedForDivorce([]);
     setIsTradeMode(false);
     setSelectedForTrade([]);
+    setSplitOutputs([]);
+    setExportOutput('');
   };
 
   const handleClear = () => {
@@ -140,6 +167,8 @@ export default function MudaeSorterPage() {
     setSelectedForDivorce([]);
     setIsTradeMode(false);
     setSelectedForTrade([]);
+    setSplitOutputs([]);
+    setExportOutput('');
   };
 
   const moveEntry = (fromIndex: number, toIndex: number) => {
@@ -233,9 +262,17 @@ export default function MudaeSorterPage() {
 
   const handleExport = async () => {
     if (!exportCommand) return;
-
     setExportOutput(exportCommand);
+    setSplitOutputs([]);
     setCopyLabel('Copy');
+  };
+
+  const handleExportSplit = () => {
+    const names = entries.map((e) => e.name);
+    const commands = buildSmCommands(names);
+    setSplitOutputs(commands);
+    setSplitCopyLabels(commands.map(() => 'Copy'));
+    setExportOutput('');
   };
 
   const handleToggleDivorceMode = () => {
@@ -372,7 +409,8 @@ export default function MudaeSorterPage() {
             </div>
             <textarea
               className="min-h-[160px] w-full rounded-lg border border-slate-200/10 bg-slate-950/40 px-4 py-3 text-sm text-slate-200 placeholder:text-slate-500 focus:border-teal-400/60 focus:outline-none"
-              placeholder="Saber - https://mudae.net/uploads/...\nSamira - https://mudae.net/uploads/..."
+              placeholder={`Arlecchino - https://mudae.net/uploads/...
+Saber - https://mudae.net/uploads/...`}
               value={rawInput}
               onChange={(event) => setRawInput(event.target.value)}
             />
@@ -433,6 +471,16 @@ export default function MudaeSorterPage() {
                 >
                   Export $sm
                 </button>
+                {isSingleSmTooLong && (
+                  <button
+                    type="button"
+                    onClick={handleExportSplit}
+                    className="rounded-full bg-amber-400/10 border border-amber-300/40 px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-amber-200 transition hover:bg-amber-400/20"
+                    title="$sm exceeds 2000 characters — split into $sm + $smpos"
+                  >
+                    Split $sm / $smpos
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={() => setUseCompactGrid((prev) => !prev)}
@@ -492,6 +540,44 @@ export default function MudaeSorterPage() {
                   value={exportOutput}
                   className="mt-2 min-h-[72px] w-full rounded-md border border-slate-700/60 bg-slate-900/60 px-3 py-2 text-xs text-slate-200 focus:outline-none"
                 />
+              </div>
+            )}
+            {splitOutputs.length > 0 && (
+              <div className="mt-3 rounded-lg border border-amber-300/20 bg-slate-950/40 p-3">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-amber-300">Split Export — {splitOutputs.length} commands</p>
+                <p className="mt-1 text-[10px] text-slate-500">Paste each command separately into Discord.</p>
+                <div className="mt-3 flex flex-col gap-3">
+                  {splitOutputs.map((cmd, i) => (
+                    <div key={i}>
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+                          {i === 0 ? '$sm' : `$smpos (part ${i + 1})`}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            try {
+                              await navigator.clipboard.writeText(cmd);
+                              setSplitCopyLabels((prev) => prev.map((l, j) => j === i ? 'Copied' : l));
+                              window.setTimeout(() => setSplitCopyLabels((prev) => prev.map((l, j) => j === i ? 'Copy' : l)), 1200);
+                            } catch {
+                              setSplitCopyLabels((prev) => prev.map((l, j) => j === i ? 'Failed' : l));
+                              window.setTimeout(() => setSplitCopyLabels((prev) => prev.map((l, j) => j === i ? 'Copy' : l)), 1200);
+                            }
+                          }}
+                          className="rounded-full border border-slate-200/20 px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-slate-300 transition hover:border-slate-200/40"
+                        >
+                          {splitCopyLabels[i] ?? 'Copy'}
+                        </button>
+                      </div>
+                      <textarea
+                        readOnly
+                        value={cmd}
+                        className="mt-1.5 min-h-[56px] w-full rounded-md border border-slate-700/60 bg-slate-900/60 px-3 py-2 text-xs text-slate-200 focus:outline-none"
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
             <ol
