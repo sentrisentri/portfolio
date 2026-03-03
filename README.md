@@ -12,7 +12,7 @@ A modern, responsive portfolio website showcasing my journey as a Software Engin
 - **Dynamic Modals**: Interactive project details with routing integration
 - **Performance Optimized**: Built with Next.js 15 and Turbopack for fast loading
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - **Framework**: [Next.js 15](https://nextjs.org/) with App Router
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
@@ -21,7 +21,7 @@ A modern, responsive portfolio website showcasing my journey as a Software Engin
 - **Build Tool**: [Turbopack](https://turbo.build/pack) for fast development
 - **Deployment**: [Vercel](https://vercel.com/) (production ready)
 
-## 🎯 Sections
+##  Sections
 
 ### About
 Personal introduction highlighting my background as a 2nd year Software Development student, passion for web development, and experience with client projects.
@@ -39,7 +39,7 @@ Personal introduction highlighting my background as a 2nd year Software Developm
 - **[Trikommerce](https://github.com/sentrisentri/Trikommerce-Project)** - Python e-commerce application
 - **[Contacts Management](https://github.com/sentrisentri/contacts)** - Python contact management system
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 - Node.js 18+ 
@@ -75,7 +75,7 @@ Personal introduction highlighting my background as a 2nd year Software Developm
 | `npm run start` | Start production server |
 | `npm run lint` | Run ESLint for code quality |
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 portfolio/
@@ -98,7 +98,7 @@ portfolio/
 └── package.json                 # Project dependencies
 ```
 
-## 🎨 Design Features
+##  Design Features
 
 ### Interactive Elements
 - **Custom Cursor**: Glow effect that adapts to hoverable elements
@@ -129,7 +129,7 @@ portfolio/
 - Project descriptions and links
 - Social media links in the sidebar
 
-## 🚀 Deployment
+##  Deployment
 
 ### Vercel (Recommended)
 1. Connect your GitHub repository to Vercel
@@ -142,17 +142,17 @@ npm run build
 npm run start
 ```
 
-## 📧 Contact
+##  Contact
 
 - **Email**: [kirubel.mulat@gmail.com](mailto:kirubel.mulat@gmail.com)
 - **GitHub**: [@sentrisentri](https://github.com/sentrisentri)
 - **Twitter/X**: [@sentrisentri](https://x.com/sentrisentri)
 
-## 📄 License
+##  License
 
 This project is open source and available under the [MIT License](LICENSE).
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - Design inspiration from modern portfolio websites
 - Built with the amazing Next.js and Tailwind CSS communities
@@ -160,4 +160,3 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
-**Built with ❤️ by Kirubel Mulat**
