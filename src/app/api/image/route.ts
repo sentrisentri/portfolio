@@ -28,13 +28,15 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Host not allowed.' }, { status: 403 });
   }
 
+  const isLikelyGif = parsedUrl.pathname.toLowerCase().endsWith('.gif');
+
   const upstreamResponse = await fetch(parsedUrl.toString(), {
     headers: {
       'User-Agent': 'Mozilla/5.0',
       'Accept': 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8',
       'Referer': `${parsedUrl.origin}/`,
     },
-    cache: 'no-store',
+    cache: isLikelyGif ? 'no-store' : 'force-cache',
   });
 
   if (!upstreamResponse.ok) {
@@ -42,13 +44,16 @@ export async function GET(request: Request) {
   }
 
   const contentType = upstreamResponse.headers.get('content-type') || 'application/octet-stream';
+  const isGif = contentType === 'image/gif';
   const arrayBuffer = await upstreamResponse.arrayBuffer();
 
   return new NextResponse(arrayBuffer, {
     status: 200,
     headers: {
       'Content-Type': contentType,
-      'Cache-Control': 'public, max-age=86400, s-maxage=86400',
+      'Cache-Control': isGif
+        ? 'no-store'
+        : 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=604800',
     },
   });
 }
